@@ -8,7 +8,7 @@ def vin_check (vin):
     vin = vin.upper()
     vals = {k:v for k, v in zip(CHARS, list(range(1,9)) + list(range(1,6)) + [7, 9] + list(range(2,10)) + list(range(1,10)) + [0])}
     weights = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-    s = reduce(add, [vals[c] * w for c, w in vin, weights])
+    s = reduce(add, [vals[c] * w for c, w in zip(vin, weights)])
     check_digit = s % 11
     if check_digit == 10:
         check_digit = "X"
@@ -16,17 +16,17 @@ def vin_check (vin):
 
 def continent (vin):
     x = vin[0].upper()
-    if x in CHAR[:8]:  # "ABCDEFGH"
+    if x in CHARS[:8]:  # "ABCDEFGH"
         return "Africa"
-    elif x in CHAR[8:15]: # "JKLMNPR"
+    elif x in CHARS[8:15]: # "JKLMNPR"
         return "Asia"
-    elif x in CHAR[15:23]: # "STUVWXYZ"
+    elif x in CHARS[15:23]: # "STUVWXYZ"
         return "Europe"
-    elif x in CHAR[23:28]: # "12345"
+    elif x in CHARS[23:28]: # "12345"
         return "North America"
-    elif x in CHAR[28:30]: # "67"
+    elif x in CHARS[28:30]: # "67"
         return"Oceania"
-    elif x in CHAR[30:32]: # "89"
+    elif x in CHARS[30:32]: # "89"
         return "South America"
 
 def country (vin):
@@ -286,12 +286,20 @@ def is_valid (vin):
     vin = vin.upper()
     return len(vin) == 17 and\
            vin[0] != "0" and\
-           set(vin).issubset(set(CHARS))
-           "U" not in vin[9] and\ # to check against european VINs
-           "Z" not in vin[9] and\ # to check against european VINs
-           "0" not in vin[9] and\ # to check against european VINs
-           vin_check(vin) and\ # to check against european VINs
+           set(vin).issubset(set(CHARS)) and\
+           vin[9] not in "ZU0" and\
            country(vin) != "unassigned"
+
+def wmi (vin):
+    vin = vin.upper()
+    if vin[3] == "9":
+        return vin[:2]
+    else:
+        return vin[:3]
+
+def vis (vin):
+    vin = vin.upper()
+    return vin[9:]
 
 def parse (vin):
     r = {}
@@ -299,6 +307,7 @@ def parse (vin):
         r["continent"] = continent(vin)
         r["country"] = country(vin)
         r["year"] = year(vin)
+        r["check"] = vin_check(vin)
         return r
-    else
+    else:
         return None
