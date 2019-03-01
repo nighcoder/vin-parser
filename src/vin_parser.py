@@ -292,14 +292,26 @@ def is_valid (vin):
 
 def wmi (vin):
     vin = vin.upper()
-    if vin[3] == "9":
-        return vin[:2]
+    if vin[2] == "9":
+        return vin[:3] + vin[11:14]
     else:
         return vin[:3]
 
 def vis (vin):
     vin = vin.upper()
     return vin[9:]
+
+def _get_wmicsv():
+    from csv import reader
+    with open("resources/wmi.csv", "r") as csvfile:
+        ml = [c for c in reader(csvfile)]
+        return {ml[i][0].strip(): ml[i][1].strip() for i in range(1,len(ml))}
+
+def manuf (vin):
+    vin = vin.upper()
+    manfs = _get_wmicsv()
+    w = wmi (vin)
+    return manfs.get(w[:2]) or manfs.get(w)
 
 def parse (vin):
     r = {}
@@ -308,6 +320,7 @@ def parse (vin):
         r["country"] = country(vin)
         r["year"] = year(vin)
         r["check"] = vin_check(vin)
+        r["manufacturer"] = manuf(vin)
         return r
     else:
         return None
