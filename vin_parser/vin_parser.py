@@ -4,8 +4,14 @@ from operator import add
 
 CHARS = "ABCDEFGHJKLMNPRSTUVWXYZ1234567890"
 
+def upper(func):
+    def wrapped(vin):
+        vin = vin.upper()
+        return func(vin)
+    return wrapped
+
+@upper
 def vin_check (vin):
-    vin = vin.upper()
     vals = {k:v for k, v in zip(CHARS, list(range(1,9)) + list(range(1,6)) + [7, 9] + list(range(2,10)) + list(range(1,10)) + [0])}
     weights = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
     s = reduce(add, [vals[c] * w for c, w in zip(vin, weights)])
@@ -14,8 +20,9 @@ def vin_check (vin):
         check_digit = "X"
     return str(check_digit) == vin[8]
 
+@upper
 def continent (vin):
-    x = vin[0].upper()
+    x = vin[0]
     if x in CHARS[:8]:  # "ABCDEFGH"
         return "Africa"
     elif x in CHARS[8:15]: # "JKLMNPR"
@@ -29,8 +36,8 @@ def continent (vin):
     elif x in CHARS[30:32]: # "89"
         return "South America"
 
+@upper
 def country (vin):
-    vin = vin.upper()
     ch1 = vin[0]
     ch2 = vin[1]
 
@@ -271,8 +278,8 @@ def country (vin):
         elif ch2 == "0": 
             return "unassigned"
 
+@upper
 def year (vin):
-    vin = vin.upper()
     year_ch = (c for c in CHARS if c not in "UZ0")
     if vin[6] in CHARS[:23]: # char 7 in VIN is a letter
         years = range(2010, 2040)
@@ -282,33 +289,33 @@ def year (vin):
         if c[0] == vin[9]:
             return c[1]
 
+@upper
 def is_valid (vin):
-    vin = vin.upper()
     return len(vin) == 17 and\
            vin[0] != "0" and\
            set(vin).issubset(set(CHARS)) and\
            vin[9] not in "ZU0" and\
            country(vin) != "unassigned"
 
+@upper
 def wmi (vin):
-    vin = vin.upper()
     if vin[2] == "9":
         return vin[:3] + vin[11:14]
     else:
         return vin[:3]
 
+@upper
 def vis (vin):
-    vin = vin.upper()
     return vin[9:]
 
 def _get_wmicsv():
     from csv import reader
-    with open("resources/wmi.csv", "r") as csvfile:
+    with open("data/wmi.csv", "r") as csvfile:
         ml = [c for c in reader(csvfile)]
         return {ml[i][0].strip(): ml[i][1].strip() for i in range(1,len(ml))}
 
+@upper
 def manuf (vin):
-    vin = vin.upper()
     manfs = _get_wmicsv()
     w = wmi (vin)
     return manfs.get(w[:2]) or manfs.get(w)

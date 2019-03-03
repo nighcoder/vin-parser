@@ -1,0 +1,8 @@
+vin_parser/__pycache__/
+test/__pycache__/
+vin_parser/*.pyc
+dist/
+build/
+vin_parser.egg-info/
+vin_parser.dist-info/
+
