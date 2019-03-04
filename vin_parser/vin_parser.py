@@ -11,14 +11,18 @@ def upper(func):
     return wrapped
 
 @upper
-def vin_check (vin):
+def check_no(vin):
+    return vin[8]
+
+@upper
+def check_valid (vin):
     vals = {k:v for k, v in zip(CHARS, list(range(1,9)) + list(range(1,6)) + [7, 9] + list(range(2,10)) + list(range(1,10)) + [0])}
     weights = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
     s = reduce(add, [vals[c] * w for c, w in zip(vin, weights)])
     check_digit = s % 11
     if check_digit == 10:
         check_digit = "X"
-    return str(check_digit) == vin[8]
+    return str(check_digit) == check_no(vin)
 
 @upper
 def continent (vin):
@@ -298,11 +302,22 @@ def is_valid (vin):
            country(vin) != "unassigned"
 
 @upper
+def small_manuf (vin):
+    if vin[2] == "9":
+        return True
+    else:
+        return False
+
+@upper
 def wmi (vin):
     if vin[2] == "9":
         return vin[:3] + vin[11:14]
     else:
         return vin[:3]
+
+@upper
+def vds (vin):
+    return vin[3:9]
 
 @upper
 def vis (vin):
@@ -320,14 +335,27 @@ def manuf (vin):
     w = wmi (vin)
     return manfs.get(w[:2]) or manfs.get(w)
 
+@upper
+def seq_no (vin):
+    if small_manuf(vin):
+        return vin[-3:]
+    else:
+        return vin[-6:]
+
 def parse (vin):
     r = {}
     if is_valid(vin):
         r["continent"] = continent(vin)
         r["country"] = country(vin)
-        r["year"] = year(vin)
-        r["check"] = vin_check(vin)
         r["manufacturer"] = manuf(vin)
+        r["year"] = year(vin)
+        r["check_no"] = check_no(vin)
+        r["small_manuf"] = small_manuf(vin)
+        r["check_valid"] = check_valid(vin)
+        r["wmi"] = wmi(vin)
+        r["vds"] = vds(vin)
+        r["vis"] = vis(vin)
+        r["seq_no"] = seq_no(vin)
         return r
     else:
         return None

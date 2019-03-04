@@ -4,7 +4,6 @@ WMI, Manufacturer
 1C4, Chrysler
 1C6, Chrysler
 1D3, Dodge
-1F9, FWD Corp.
 1FA, Ford Motor Company
 1FB, Ford Motor Company
 1FC, Ford Motor Company
@@ -34,12 +33,10 @@ WMI, Manufacturer
 1M2, Mack Truck USA
 1M3, Mack Truck USA
 1M4, Mack Truck USA
-1M9, Mynatt Truck & Equipment
 1ME, Mercury USA
 1N, Nissan USA
 1NX, NUMMI USA
 1P3, Plymouth USA
-1R9, Roadrunner Hay Squeeze USA
 1VW, Volkswagen USA
 1XK, Kenworth USA
 1XP, Peterbilt USA
@@ -64,7 +61,6 @@ WMI, Manufacturer
 2G2, Pontiac Canada
 2G3, Oldsmobile Canada
 2G4, Buick Canada
-2G9, mfr. of less than 1000/ yr. Canada
 2Gx, General Motors Canada
 2HG, Honda Canada
 2HH, Acura Canada
@@ -107,7 +103,6 @@ WMI, Manufacturer
 4RK, Nova Bus USA
 4S, Subaru-Isuzu Automotive
 4T, Toyota
-4T9, Lumen Motors
 4UF, Arctic Cat Inc.
 4US, BMW USA
 4UZ, Frt-Thomas Bus
@@ -142,7 +137,6 @@ WMI, Manufacturer
 6H8, General Motors-Holden (pre Nov 2002)
 6MM, Mitsubishi Motors Australia
 6T1, Toyota Motor Corporation Australia
-6U9, Privately Imported car in Australia
 7A1, Mitsubishi New Zealand
 7A3, Honda New Zealand
 7A4, Toyota New Zealand
@@ -293,7 +287,6 @@ MC2, Volvo Eicher commercial vehicles limited.
 MCA, Fiat India
 MCB, GM India
 MD2, Bajaj Auto
-MD9, Shuttle Cars India
 MDH, Nissan India
 MEE, Renault India
 MEX, Volkswagen India
@@ -367,14 +360,11 @@ SUU, Solaris Bus & Coach (Poland)
 SWV, TA-NO (Poland)
 TCC, Micro Compact Car AG (smart 1998-1999)
 TDM, QUANTYA Swiss Electric Movement (Switzerland)
-TK9, SOR buses (Czech Republic)
-TM9, Škoda trolleybuses (Czech Republic)
 TMA, Hyundai Motor Manufacturing Czech
 TMB, Škoda (Czech Republic)
 TMK, Karosa (Czech Republic)
 TMP, Škoda trolleybuses (Czech Republic)
 TMT, Tatra (Czech Republic)
-TN9, Karosa (Czech Republic)
 TNE, TAZ
 TRA, Ikarus Bus
 TRU, Audi Hungary
@@ -399,7 +389,7 @@ VF4, Talbot
 VF6, Renault (Trucks & Buses)
 VF7, Citroën
 VF8, Matra
-VF9/795, Bugatti
+VF9795, Bugatti
 VG5, MBK (motorcycles)
 VLU, Scania France
 VN1, SOVAB (France)
@@ -408,7 +398,6 @@ VNK, Toyota France
 VNV, Renault-Nissan
 VS6, Ford Spain
 VS7, Citroën Spain
-VS9, Carrocerias Ayats (Spain)
 VSA, Mercedes-Benz Spain
 VSE, Suzuki Spain (Santana Motors)
 VSK, Nissan Spain
@@ -417,11 +406,9 @@ VSX, Opel Spain
 VTH, Derbi (motorcycles)
 VTL, Yamaha Spain (motorcycles)
 VTT, Suzuki Spain (motorcycles)
-VV9, TAURO Spain
 VWA, Nissan Spain
 VWV, Volkswagen Spain
 VX1, Zastava / Yugo Serbia
-W09, RUF
 W0L, Opel
 W0V, Opel
 WA1, Audi SUV
@@ -458,7 +445,7 @@ X1M, PAZ (Russia)
 X4X, AvtoTor (Russia, BMW SKD)
 X7L, Renault AvtoFramos (Russia)
 X7M, Hyundai TagAZ (Russia)
-XL9/363, Spyker
+XL9363, Spyker
 XLB, Volvo (NedCar)
 XLE, Scania Netherlands
 XLR, DAF (trucks)
@@ -485,8 +472,8 @@ YK1, Saab-Valmet Finland
 YS2, Scania AB
 YS3, Saab
 YS4, Scania Bus
-YT9/007, Koenigsegg
-YT9/034, Carvia
+YT9007, Koenigsegg
+YT9034, Carvia
 YTN, Saab NEVS
 YU7, Husaberg (motorcycles)
 YV1, Volvo Cars
