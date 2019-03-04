@@ -1,6 +1,8 @@
 # VIN parser - library to parse VIN strings
 from functools import reduce
 from operator import add
+import csv
+from pkg_resources import resource_filename
 
 CHARS = "ABCDEFGHJKLMNPRSTUVWXYZ1234567890"
 
@@ -324,9 +326,9 @@ def vis (vin):
     return vin[9:]
 
 def _get_wmicsv():
-    from csv import reader
-    with open("data/wmi.csv", "r") as csvfile:
-        ml = [c for c in reader(csvfile)]
+    filename = resource_filename ("vin_parser", "data/wmi.csv")
+    with open(filename, "r") as csvfile:
+        ml = [c for c in csv.reader(csvfile)]
         return {ml[i][0].strip(): ml[i][1].strip() for i in range(1,len(ml))}
 
 @upper
