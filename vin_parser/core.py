@@ -1,4 +1,3 @@
-# VIN parser - library to parse VIN strings
 from functools import reduce
 from operator import add
 import csv
@@ -10,14 +9,17 @@ def upper(func):
     def wrapped(vin):
         vin = vin.upper()
         return func(vin)
+    wrapped.__doc__ = func.__doc__
     return wrapped
 
 @upper
 def check_no(vin):
+    '''Returns the VIN check digit (9th position)'''
     return vin[8]
 
 @upper
 def check_valid (vin):
+    '''Returns True if VIN check digit is valid or False otherwise'''
     vals = {k:v for k, v in zip(CHARS, list(range(1,9)) + list(range(1,6)) + [7, 9] + list(range(2,10)) + list(range(1,10)) + [0])}
     weights = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
     s = reduce(add, [vals[c] * w for c, w in zip(vin, weights)])
@@ -28,6 +30,7 @@ def check_valid (vin):
 
 @upper
 def continent (vin):
+    '''Returns the continent associated with the VIN or None'''
     x = vin[0]
     if x in CHARS[:8]:  # "ABCDEFGH"
         return "Africa"
@@ -44,6 +47,8 @@ def continent (vin):
 
 @upper
 def country (vin):
+    '''Returns the country associated with the VIN or `unassigned`.
+    Returns None if first two characters in VIN contain illegal characters'''
     ch1 = vin[0]
     ch2 = vin[1]
 
@@ -286,6 +291,7 @@ def country (vin):
 
 @upper
 def year (vin):
+    '''Returns the vehicle model year'''
     year_ch = (c for c in CHARS if c not in "UZ0")
     if vin[6] in CHARS[:23]: # char 7 in VIN is a letter
         years = range(2010, 2040)
@@ -297,6 +303,7 @@ def year (vin):
 
 @upper
 def is_valid (vin):
+    '''Returns True if VIN is valid'''
     return len(vin) == 17 and\
            vin[0] != "0" and\
            set(vin).issubset(set(CHARS)) and\
@@ -305,6 +312,8 @@ def is_valid (vin):
 
 @upper
 def small_manuf (vin):
+    '''Returns True if manufacturer builds a limited number of vehicles a year.
+    The limit varies globally.'''
     if vin[2] == "9":
         return True
     else:
@@ -312,6 +321,7 @@ def small_manuf (vin):
 
 @upper
 def wmi (vin):
+    '''Returns the World Manufacturer Identifier.'''
     if vin[2] == "9":
         return vin[:3] + vin[11:14]
     else:
@@ -319,10 +329,12 @@ def wmi (vin):
 
 @upper
 def vds (vin):
+    '''Returns the Vehicle Descriptor Section.'''
     return vin[3:9]
 
 @upper
 def vis (vin):
+    '''Returns the Vehicle Identifier Section.'''
     return vin[9:]
 
 def _get_wmicsv():
@@ -333,18 +345,22 @@ def _get_wmicsv():
 
 @upper
 def manuf (vin):
+    '''Returns the manufacturer.'''
     manfs = _get_wmicsv()
     w = wmi (vin)
     return manfs.get(w[:2]) or manfs.get(w)
 
 @upper
 def seq_no (vin):
+    '''Returns the vehicle sequence number.'''
     if small_manuf(vin):
         return vin[-3:]
     else:
         return vin[-6:]
 
 def parse (vin):
+    '''Parses the VIN and returns a dict with the results.
+    Returns None if VIN is not valid.'''
     r = {}
     if is_valid(vin):
         r["continent"] = continent(vin)
