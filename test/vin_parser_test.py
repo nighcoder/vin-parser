@@ -23,8 +23,8 @@ def vin1 ():
     year = vp.year(vin)
     assert year == 2012, f"year({vin}) == 2012. Got {year}"
     manuf = vp.manuf(vin)
-    assert manuf == "Dodge", f"manuf({vin}) == Dodge. Got {manuf}"
-    wmi = vpn.wmi(vin)
+    assert manuf == "Chrysler Mexico", f"manuf({vin}) == Chrysler Mexico. Got {manuf}"
+    wmi = vp.wmi(vin)
     assert wmi == "3C6", f"wmi({vin}) == 3C6. Got {wmi}"
     vis = vp.vis(vin)
     assert vis == "CG295248", f"vis({vin}) == CG295248. Got {vis}"

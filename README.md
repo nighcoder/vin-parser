@@ -2,16 +2,18 @@
 Library that provides functions to work with VIN strings.
 
 ## Install
+vin-parser is available on PyPI and can be installed using pip.
+
 `$ pip install vin-parser`
 
 ## Usage
+All the public functions are exported to the package namespace. We'll alias it as vp in the following examples.
+
 `>>> import vin_parser as vp`
 <!--
 Example usage with some fakey VINS.
 Show wmi, vds for lowercase VINS
 -->
-
-All the public functions are exported to the package namespace.
 
 The functions `check_no`, `seq_no`, `wmi`, `vds` and `vis` return parts of the VIN string.
 ```python3
