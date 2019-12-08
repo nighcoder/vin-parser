@@ -1,6 +1,7 @@
 import sys, os
-os.chdir("./vin_parser")
+#os.chdir("./vin_parser")
 sys.path.append(".")
+
 import vin_parser as vp
 from datetime import date
 
@@ -116,6 +117,3 @@ if __name__ == "__main__":
     else:
         print(f"{i} tests failed")
     exit(min(i, 255))
-
-
-
