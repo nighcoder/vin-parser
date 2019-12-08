@@ -2,6 +2,7 @@ from functools import reduce
 from operator import add
 import csv
 from pkg_resources import resource_filename
+from datetime import datetime as dt
 
 CHARS = "ABCDEFGHJKLMNPRSTUVWXYZ1234567890"
 
@@ -15,7 +16,7 @@ def upper(func):
 @upper
 def check_no(vin):
     '''Returns the VIN check digit (9th position)'''
-    return vin[8]
+    return vin[8] # Is only meaningful for NA and China market cars.
 
 @upper
 def check_valid (vin):
@@ -53,7 +54,7 @@ def country (vin):
     ch2 = vin[1]
 
     # Africa
-    if ch1 == "A": 
+    if ch1 == "A":
         if ch2 in CHARS[:8]:
             return "South Africa"
         elif ch2 in CHARS[8:13]:
@@ -103,7 +104,7 @@ def country (vin):
             return "unassigned"
     elif ch1 in CHARS[6:8]:
         return "unassigned"
- 
+
     # Asia
     elif ch1 == "J":
          return "Japan"
@@ -135,7 +136,7 @@ def country (vin):
         elif ch2 in CHARS[10:15]:
             return "Turkey"
         elif ch2 in CHARS[15:]:
-            return "unassigned"       
+            return "unassigned"
     elif ch1 == "P":
         if ch2 in CHARS[:5]:
             return "Philippines"
@@ -144,7 +145,7 @@ def country (vin):
         elif ch2 in CHARS[10:15]:
             return "Malaysia"
         elif ch2 in CHARS[15:]:
-            return "unassigned"        
+            return "unassigned"
     elif ch1 == "R":
         if ch2 in CHARS[:5]:
             return "United Arab Emirates"
@@ -153,7 +154,7 @@ def country (vin):
         elif ch2 in CHARS[10:15]:
             return "Vietnam"
         elif ch2 in CHARS[15:]:
-            return "Saudi Arabia"        
+            return "Saudi Arabia"
 
     # Europe
     elif ch1 == "S":
@@ -260,7 +261,7 @@ def country (vin):
         return "Australia"
     elif ch1 == "7":
         return "New Zealand"
-    
+
     # South America
     elif ch1 == "8":
         if ch2 in CHARS[:5]:
@@ -270,7 +271,7 @@ def country (vin):
         elif ch2 in CHARS[10:15]:
             return "Ecuador"
         elif ch2 in CHARS[15:20]:
-            return "Peru"        
+            return "Peru"
         elif ch2 in CHARS[20:25]:
             return "Venezuela"
         elif ch2 in CHARS[25:]:
@@ -283,31 +284,46 @@ def country (vin):
         elif ch2 in CHARS[10:15]:
             return "Paraguay"
         elif ch2 in CHARS[15:20]:
-            return "Uruguay"        
+            return "Uruguay"
         elif ch2 in CHARS[20:25]:
             return "Trinidad & Tobago"
-        elif ch2 == "0": 
+        elif ch2 == "0":
             return "unassigned"
 
 @upper
 def year (vin):
     '''Returns the vehicle model year'''
     year_ch = (c for c in CHARS if c not in "UZ0")
-    if vin[6] in CHARS[:23]: # char 7 in VIN is a letter
-        years = range(2010, 2040)
+    # This pos 7 check was introduced in US for NA autos.
+    # Is not valid for EU, Asia Cars
+    if continent(vin) == "North America":
+        if vin[6] in CHARS[:23]: # char 7 in VIN is a letter
+            years = range(2010, 2040)
+        else:
+            years = range(1980, 2010)
     else:
-        years = range(1980, 2010)
+        years = range(2010, 2040)
     for c in zip(year_ch, years):
         if c[0] == vin[9]:
-            return c[1]
+            # Check for model years in the future
+            if c[1] > dt.now().year + 1:
+                return c[1] - 30
+            else:
+                return c[1]
 
 @upper
 def is_valid (vin):
     '''Returns True if VIN is valid'''
+    if continent(vin) == "North America":
+        # Limitations are true only on North Ameerican markets.
+        if vin[9] not in "ZU0": y = True
+        else: y = False
+    else: y = True
+    # North America and China VINs have a check_no that can be test for validity
     return len(vin) == 17 and\
            vin[0] != "0" and\
            set(vin).issubset(set(CHARS)) and\
-           vin[9] not in "ZU0" and\
+           y and\
            country(vin) != "unassigned"
 
 @upper
