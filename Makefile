@@ -1,9 +1,9 @@
-.PHONY: test
+.PHONY: test develop source clean install
 
-develop: dist/vin_parser%.
+develop: 
 	python3 setup.py develop
 
-source: vin_parser
+source: 
 	python3 setup.py sdist
 
 clean:
