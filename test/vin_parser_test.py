@@ -96,16 +96,37 @@ def vin4 ():
 def years ():
     vinl = ["1GKKRNED9EJ262581", "2A4GP54L16R805929", "JM1BL1M72C1587426", "1FTEW1CM9BFA74557",
             "1FAFP34P63W132895", "1J4GL48K05W616251", "3VWDX7AJ2BM339496", "5LMJJ3J57EEL08671",
-            "WMWMF7C56ATZ69847", "JTDKN3DU9F0421684"]
+            "WMWMF7C56ATZ69847", "JTDKN3DU9F0421684", "3C3CFFAR2CT212308", "KNMCSHLMS6P600875",
+            "Y7A6135B660801530", "TRUZZZSNZY1063363"]
+    yearsl = [2014, 2006, 2012, 2011,
+              2003, 2005, 2011, 2014,
+              2010, 2015, 2012, 2006,
+              2006, 2000]
+
     cur_year = date.today().year
     yearl = [vp.year(v) for v in vinl]
 
-    assert max(yearl) <= cur_year, f"Manufacture year is in the future"
+    assert max(yearl) <= cur_year, f"Model year is in the future"
+    assert yearl == yearsl, f"Year list failed: {yearl} != {yearsl}"
+
+    return True
+
+def manufs ():
+    vinl = ["1GKKRNED9EJ262581", "2A4GP54L16R805929", "JM1BL1M72C1587426", "1FTEW1CM9BFA74557",
+            "1FAFP34P63W132895", "1J4GL48K05W616251", "3VWDX7AJ2BM339496", "5LMJJ3J57EEL08671",
+            "WMWMF7C56ATZ69847", "JTDKN3DU9F0421684", "3C3CFFAR2CT212308", "KNMCSHLMS6P600875",
+            "Y7A6135B660801530", "TRUZZZSNZY1063363"]
+    resl = ["General Motors USA", "Chrysler Canada", "Mazda", "Ford Motor Company",
+            "Ford Motor Company", "Jeep", "Volkswagen Mexico", "Lincoln", "MINI", "Toyota",
+            "Chrysler Mexico", "Kia", "Kraz", "Audi Hungary"]
+
+    for v in zip(vinl, resl):
+        assert vp.manuf(v[0]) == v[1], f"Manuf({v[0]}) == {v[1]}"
 
     return True
 
 if __name__ == "__main__":
-    ALL_TESTS = [vin1, vin2, vin3, vin4, years]
+    ALL_TESTS = [vin1, vin2, vin3, vin4, years, manufs]
     i = 0
     for t in ALL_TESTS:
         if not t():
