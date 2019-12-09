@@ -5,4 +5,5 @@ dist/
 build/
 vin_parser.egg-info/
 vin_parser.dist-info/
+.pythonenv
 

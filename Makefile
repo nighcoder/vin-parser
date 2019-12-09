@@ -7,7 +7,7 @@ source:
 	python3 setup.py sdist
 
 clean:
-	rm -rf dist build vin_parser.egg-info
+	rm -rf dist build vin_parser.egg-info vin_parser/__pycache__
 
 install:
 	python3 setup.py install
