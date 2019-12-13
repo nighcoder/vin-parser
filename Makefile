@@ -1,10 +1,16 @@
-.PHONY: test develop source clean install
+.PHONY: test develop source clean install build
 
 develop: 
 	python3 setup.py develop
 
 source: 
 	python3 setup.py sdist
+
+build: 
+	python3 setup.py sdist bdist_wheel
+
+upload:
+	python3 -m twine upload dist/*
 
 clean:
 	rm -rf dist build vin_parser.egg-info vin_parser/__pycache__
