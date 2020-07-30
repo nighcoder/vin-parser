@@ -1,6 +1,7 @@
 from functools import reduce
 from operator import add
 import csv
+import re
 from pkg_resources import resource_filename
 from datetime import datetime as dt
 
@@ -13,12 +14,29 @@ def upper(func):
     wrapped.__doc__ = func.__doc__
     return wrapped
 
+def valid(func):
+    def wrapped(vin):
+        # cant be empty
+        if type(vin) != str:
+            return False
+        # len should be 17
+        if len(vin) != 17:
+            return False
+        # cant have letters IOQ
+        if re.search('[IOQ]',vin) != None:
+            return False
+
+        return func(vin)
+    wrapped.__doc__ = func.__doc__
+    return wrapped
+
 @upper
 def check_no(vin):
     '''Returns the VIN check digit (9th position)'''
     return vin[8] # Is only meaningful for NA and China market cars.
 
 @upper
+@valid
 def check_valid (vin):
     '''Returns True if VIN check digit is valid or False otherwise'''
     vals = {k:v for k, v in zip(CHARS, list(range(1,9)) + list(range(1,6)) + [7, 9] + list(range(2,10)) + list(range(1,10)) + [0])}
@@ -30,6 +48,7 @@ def check_valid (vin):
     return str(check_digit) == check_no(vin)
 
 @upper
+@valid
 def continent (vin):
     '''Returns the continent associated with the VIN or None'''
     x = vin[0]
@@ -47,6 +66,7 @@ def continent (vin):
         return "South America"
 
 @upper
+@valid
 def country (vin):
     '''Returns the country associated with the VIN or `unassigned`.
     Returns None if first two characters in VIN contain illegal characters'''
@@ -291,6 +311,7 @@ def country (vin):
             return "unassigned"
 
 @upper
+@valid
 def year (vin):
     '''Returns the vehicle model year'''
     year_ch = (c for c in CHARS if c not in "UZ0")
@@ -312,6 +333,7 @@ def year (vin):
                 return c[1]
 
 @upper
+@valid
 def is_valid (vin):
     '''Returns True if VIN is valid'''
     if continent(vin) == "North America":
@@ -327,6 +349,7 @@ def is_valid (vin):
            country(vin) != "unassigned"
 
 @upper
+@valid
 def small_manuf (vin):
     '''Returns True if manufacturer builds a limited number of vehicles a year.
     The limit varies globally.'''
@@ -336,6 +359,7 @@ def small_manuf (vin):
         return False
 
 @upper
+@valid
 def wmi (vin):
     '''Returns the World Manufacturer Identifier.'''
     if vin[2] == "9":
@@ -344,11 +368,13 @@ def wmi (vin):
         return vin[:3]
 
 @upper
+@valid
 def vds (vin):
     '''Returns the Vehicle Descriptor Section.'''
     return vin[3:9]
 
 @upper
+@valid
 def vis (vin):
     '''Returns the Vehicle Identifier Section.'''
     return vin[9:]
@@ -360,6 +386,7 @@ def _get_wmicsv():
         return {ml[i][0].strip(): ml[i][1].strip() for i in range(1,len(ml))}
 
 @upper
+@valid
 def manuf (vin):
     '''Returns the manufacturer.'''
     manfs = _get_wmicsv()
@@ -367,6 +394,7 @@ def manuf (vin):
     return manfs.get(w[:2]) or manfs.get(w)
 
 @upper
+@valid
 def seq_no (vin):
     '''Returns the vehicle sequence number.'''
     if small_manuf(vin):

@@ -125,8 +125,28 @@ def manufs ():
 
     return True
 
+def invalid ():
+    vinl = ["", "AAA", "JM1BL1M72C158742", "1FTEW1CM9BFA745571",
+            "VIN6135B660801530", "IOQZZZSNZY1063363"]
+
+    for vin in vinl:
+
+        cont = vp.continent(vin)
+        assert cont == False, f"continent({vin}) == False. Got {cont}"
+        count = vp.country(vin)
+        assert count == False, f"country({vin}) == False. Got {count}"
+        year = vp.year(vin)
+        assert year == False, f"year({vin}) == False. False {year}"
+        manuf = vp.manuf(vin)
+        assert manuf == False, f"manuf({vin}) == False. Got {manuf}"
+        wmi = vp.wmi(vin)
+        assert wmi == False, f"wmi({vin}) == False. Got {wmi}"
+        vis = vp.vis(vin)
+        assert vis == False, f"vis({vin}) == False. Got {vis}"
+        assert vp.is_valid(vin) == False, f"is_valid({vin})"
+    return True
 if __name__ == "__main__":
-    ALL_TESTS = [vin1, vin2, vin3, vin4, years, manufs]
+    ALL_TESTS = [vin1, vin2, vin3, vin4, years, manufs, invalid]
     i = 0
     for t in ALL_TESTS:
         if not t():
